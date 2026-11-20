@@ -141,17 +141,30 @@ def call_gemini(prompt_text: str, api_key: str, json_mode: bool = True) -> str:
     generation_config = {"temperature": 0.2}
     if json_mode:
         generation_config["response_mime_type"] = "application/json"
-    model = genai.GenerativeModel("gemini-2.5-flash", generation_config=generation_config)
-    response = model.generate_content(prompt_text)
-    return response.text
+
+    # Prioritize gemini-3.8-flash as recommended by Google API, with fallbacks
+    candidate_models = ["gemini-3.8-flash", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"]
+    last_error = None
+    for model_name in candidate_models:
+        try:
+            model = genai.GenerativeModel(model_name, generation_config=generation_config)
+            response = model.generate_content(prompt_text)
+            return response.text
+        except Exception as e:
+            last_error = e
+            err_msg = str(e).lower()
+            if "404" in err_msg or "not found" in err_msg or "no longer available" in err_msg:
+                continue
+            raise e
+    raise last_error
 
 
 # Sidebar
 with st.sidebar:
     st.title("⚙️ AlignCV Settings")
-    mode = st.radio("Execution Mode", ["Offline Demo Mode (No API Key)", "Live Gemini 2.5 Flash API"])
+    mode = st.radio("Execution Mode", ["Offline Demo Mode (No API Key)", "Live Gemini API"])
     api_key = ""
-    if mode == "Live Gemini 2.5 Flash API":
+    if mode.startswith("Live Gemini"):
         try:
             if hasattr(st, "secrets") and "GEMINI_API_KEY" in st.secrets:
                 api_key = st.secrets["GEMINI_API_KEY"]
