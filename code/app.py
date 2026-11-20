@@ -152,15 +152,13 @@ with st.sidebar:
     mode = st.radio("Execution Mode", ["Offline Demo Mode (No API Key)", "Live Gemini 2.5 Flash API"])
     api_key = ""
     if mode == "Live Gemini 2.5 Flash API":
-        default_key = ""
         try:
             if hasattr(st, "secrets") and "GEMINI_API_KEY" in st.secrets:
-                default_key = st.secrets["GEMINI_API_KEY"]
+                api_key = st.secrets["GEMINI_API_KEY"]
         except Exception:
             pass
-        if not default_key:
-            default_key = os.getenv("GEMINI_API_KEY", "")
-        api_key = st.text_input("Gemini API Key", type="password", value=default_key)
+        if not api_key:
+            api_key = os.getenv("GEMINI_API_KEY", "")
     prompt_ver = st.selectbox("Prompt Version", ["v3 (2-Step Chain + Guardrails)", "v1 (Unstructured Baseline)"])
     st.markdown("---")
     st.caption("**Team PromptLab** · SCSE4041 Mini Project (C9)")
@@ -190,7 +188,7 @@ if st.button("🚀 Analyze Resume & Generate Feedback", type="primary", use_cont
                 st.write(DEMO_OUTPUT_V1)
             else:
                 if not api_key:
-                    st.error("Please enter your Gemini API key in the sidebar.")
+                    st.error("Gemini API key is not configured. Please add GEMINI_API_KEY to Streamlit Secrets or environment variables.")
                 else:
                     v1_prompt = f"You are a helpful assistant. Review this resume against the JD.\nResume:\n{redacted}\nJD:\n{jd_input}"
                     st.write(call_gemini(v1_prompt, api_key, json_mode=False))
@@ -226,7 +224,7 @@ if st.button("🚀 Analyze Resume & Generate Feedback", type="primary", use_cont
                     p2_data = DEMO_OUTPUT_V3["p2"]
             else:
                 if not api_key:
-                    st.error("Please enter your Gemini API key in the sidebar.")
+                    st.error("Gemini API key is not configured. Please add GEMINI_API_KEY to Streamlit Secrets or environment variables.")
                     st.stop()
                 with st.spinner("Running Step 1 (P1: ATS Rubric Scorer)..."):
                     p1_file = PROJECT_ROOT / "prompts" / "final" / "P1.txt"
