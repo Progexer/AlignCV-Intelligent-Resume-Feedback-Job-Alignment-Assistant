@@ -142,8 +142,16 @@ def call_gemini(prompt_text: str, api_key: str, json_mode: bool = True) -> str:
     if json_mode:
         generation_config["response_mime_type"] = "application/json"
 
-    # Prioritize gemini-3.8-flash as recommended by Google API, with fallbacks
-    candidate_models = ["gemini-3.8-flash", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"]
+    # Prioritize Gemini 3.1 Flash Lite as requested, with fallback on 404 or 429 (quota)
+    candidate_models = [
+        "gemini-3.1-flash-lite",
+        "gemini-2.5-flash-lite",
+        "gemini-2.0-flash-lite",
+        "gemini-1.5-flash-8b",
+        "gemini-3.8-flash",
+        "gemini-2.0-flash",
+        "gemini-1.5-flash",
+    ]
     last_error = None
     for model_name in candidate_models:
         try:
@@ -153,7 +161,14 @@ def call_gemini(prompt_text: str, api_key: str, json_mode: bool = True) -> str:
         except Exception as e:
             last_error = e
             err_msg = str(e).lower()
-            if "404" in err_msg or "not found" in err_msg or "no longer available" in err_msg:
+            if (
+                "404" in err_msg
+                or "not found" in err_msg
+                or "no longer available" in err_msg
+                or "429" in err_msg
+                or "quota" in err_msg
+                or "resourceexhausted" in err_msg
+            ):
                 continue
             raise e
     raise last_error
@@ -162,7 +177,7 @@ def call_gemini(prompt_text: str, api_key: str, json_mode: bool = True) -> str:
 # Sidebar
 with st.sidebar:
     st.title("⚙️ AlignCV Settings")
-    mode = st.radio("Execution Mode", ["Offline Demo Mode (No API Key)", "Live Gemini API"])
+    mode = st.radio("Execution Mode", ["Offline Demo Mode (No API Key)", "Live Gemini API (Gemini 3.1 Flash Lite)"])
     api_key = ""
     if mode.startswith("Live Gemini"):
         try:
