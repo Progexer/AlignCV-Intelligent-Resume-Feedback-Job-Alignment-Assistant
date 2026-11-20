@@ -1,0 +1,33 @@
+# Python virtual environment
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Secrets and environment variables
+.env
+*.env
+.streamlit/secrets.toml
+secrets.toml
+credentials.json
+*.key
+
+# Local automation and verification scripts
+scripts/
+
+# Personal assignment screenshots (Strictly local)
+assignment-screenshots/
+
+# OS and Editor temporary files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/

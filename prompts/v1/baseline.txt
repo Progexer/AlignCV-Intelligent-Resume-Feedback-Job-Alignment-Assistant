@@ -1,0 +1,7 @@
+You are a helpful assistant. Please review the following resume against this job description. Give me feedback, tell me if the candidate is a good fit, list missing skills, and suggest improvements.
+
+Resume:
+{resume}
+
+Job Description:
+{job_description}
