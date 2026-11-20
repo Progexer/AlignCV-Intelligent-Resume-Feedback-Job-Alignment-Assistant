@@ -20,6 +20,8 @@ credentials.json
 
 # Local automation and verification scripts
 scripts/
+deployment/
+CHANGELOG.md
 
 # Personal assignment screenshots (Strictly local)
 assignment-screenshots/
