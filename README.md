@@ -183,8 +183,8 @@ Summary metrics (see `test-results/test_summary.md`):
 ## 11. Team Members (Team ID: PE-B81-44)
 | Name | Enrollment No. | Role |
 | :--- | :--- | :--- |
-| Vedansh Upadhyay | S24CSEU2648 | Team Leader & Prompt Architect |
-| Amit Kumar | S24CSEU1978 | Prototype & UI Developer |
+| Vedansh Upadhyay | S24CSEU2648 | Prompt Architect |
+| Amit Kumar (Leader) | S24CSEU1978 | Prototype & System Design |
 | Raj Kathil | S24CSEU0602 | Evaluation & Test Engineer |
-| Aryan Jaglan | S24CSEU2260 | System Design & Documentation Lead |
+| Aryan Jaglan | S24CSEU2260 | UI Developer & Docs Lead |
 | Madhav Aggrawal | S24CSEU0213 | Technical Report & Demo Lead |
